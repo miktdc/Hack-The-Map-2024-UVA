@@ -1,13 +1,6 @@
 import 'dart:io';
 import 'package:english_words/english_words.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-import 'package:flutter/widgets.dart';
-import 'package:image_picker/image_picker.dart';
-=======
->>>>>>> refs/remotes/origin/main
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -15,26 +8,10 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
-<<<<<<< HEAD
-  MyHomePage createState() => MyHomePage(); 
-  // Widget build(BuildContext context) {
-  //   return ChangeNotifierProvider(
-  //     create: (context) => MyAppState(),
-  //     child: MaterialApp(
-  //       title: 'Namer App',
-  //       theme: ThemeData(
-  //         useMaterial3: true,
-  //         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
-  //       ),
-  //       home: MyHomePage(),
-  //     ),
-  //   );
-  // }
-=======
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
@@ -48,7 +25,6 @@ class MyApp extends StatefulWidget {
       ),
     );
   }
->>>>>>> refs/remotes/origin/main
 }
 
 class MyAppState extends ChangeNotifier {
@@ -66,21 +42,17 @@ class MyAppState extends ChangeNotifier {
   }
 }
 
-class MyHomePage extends State<MyApp> {
+class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-    // File? selectedImage; 
-=======
     var appState = context.watch<MyAppState>();
 
->>>>>>> refs/remotes/origin/main
     return Scaffold(
       appBar: AppBar(
         title: Text(
           'MenuBITE',
           style: TextStyle(
-            fontSize: 70,
+            fontSize: 50,
             fontFamily: 'Arial',
             color: Colors.orange,
           ),
@@ -132,20 +104,12 @@ class MyHomePage extends State<MyApp> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CustomButton(title: 'Take a Photo :)' icon: Icons.camera_alt_outlined, onClick: () =>{}),
           Center(
             child: ElevatedButton(
-<<<<<<< HEAD
-              onPressed: () {
-                // appState.getNext();
-                // print('button pressed!');
-                  takePhoto();
-                },
-=======
               onPressed: () async {
                 // Open the gallery to pick an image
                 final pickedFile = await ImagePicker().pickImage(
-                  source: ImageSource.gallery,
+                  source: ImageSource.camera,
                 );
 
                 if (pickedFile != null) {
@@ -157,7 +121,6 @@ class MyHomePage extends State<MyApp> {
                   print('Image selected from gallery: ${pickedFile.path}');
                 }
               },
->>>>>>> refs/remotes/origin/main
               style: ElevatedButton.styleFrom(
                 fixedSize: Size(200, 150),
               ),
@@ -169,49 +132,13 @@ class MyHomePage extends State<MyApp> {
               )
             ),
           ),
-<<<<<<< HEAD
-          //selectedImage != null ? Image.file(selectedImage!) : const Text("Please Select An Image")
-=======
           SizedBox(height: 20),
           // Display the selected image if available
           appState.imagePath != null
               ? Image.file(File(appState.imagePath!))
               : Container(),
->>>>>>> refs/remotes/origin/main
         ],
       ),
     );
-  }
-
-  Widget CustomButton({
-    required String title,
-    required IconData icon,
-    required VoidCallback onClick, 
-  }) {
-    return Container(
-      width: 200,
-      child: ElevatedButton(
-        onPressed: onClick,
-        child: Row(
-          children: [
-            Icon(icon),
-            SizedBox(
-              width: 20,
-            ),
-            Text(title)
-          ],
-        )
-      )
-    )
-
-  }
-
-  Future takePhoto() async {
-    final returnedImage = await ImagePicker().pickImage(source: ImageSource.camera);
-
-    setState(() {
-      selectedImage = File(returnedImage!.path);
-    });
-
   }
 }
