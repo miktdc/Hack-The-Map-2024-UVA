@@ -52,7 +52,7 @@ class MyHomePage extends StatelessWidget {
         title: Builder(builder: (BuildContext context) {
           return Image.asset(
             'assets/menubietapplogoHorizontal.png', // Replace with your image asset path
-            height: 40, // Adjust the height as needed
+            height: 60, // Adjust the height as needed
           );
         },
         ),
