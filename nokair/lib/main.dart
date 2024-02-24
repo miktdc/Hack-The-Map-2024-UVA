@@ -1,7 +1,7 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:image_picker/image_picker.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -41,20 +41,26 @@ class MyHomePage extends StatelessWidget {
 
     return Scaffold(
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('A random AWESOME idea:'),
-          Text(appState.current.asLowerCase),
-
           Center(
             child: ElevatedButton(
               onPressed: () {
                 appState.getNext();
                 print('button pressed!');
               },
-              child: Text('Next'),
+              style: ElevatedButton.styleFrom(
+                fixedSize:
+                    Size(200, 150), // Adjust the width and height as needed
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.camera_alt_outlined, size: 100),
+                ],
+              ),
             ),
           ),
-
         ],
       ),
     );
