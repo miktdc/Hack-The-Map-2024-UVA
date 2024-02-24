@@ -49,13 +49,12 @@ class MyHomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'MenuBITE',
-          style: TextStyle(
-            fontSize: 50,
-            fontFamily: 'Arial',
-            color: Colors.orange,
-          ),
+        title: Builder(builder: (BuildContext context) {
+          return Image.asset(
+            'assets/menubietapplogoHorizontal.png', // Replace with your image asset path
+            height: 60, // Adjust the height as needed
+          );
+        },
         ),
         leading: Builder(
           builder: (BuildContext context) {
@@ -109,7 +108,7 @@ class MyHomePage extends StatelessWidget {
               onPressed: () async {
                 // Open the gallery to pick an image
                 final pickedFile = await ImagePicker().pickImage(
-                  source: ImageSource.camera,
+                  source: ImageSource.gallery,
                 );
 
                 if (pickedFile != null) {
@@ -129,7 +128,7 @@ class MyHomePage extends StatelessWidget {
                 children: [
                   Icon(Icons.camera_alt_outlined, size: 100),
                 ],
-              )
+              ),
             ),
           ),
           SizedBox(height: 20),
