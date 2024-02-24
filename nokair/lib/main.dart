@@ -1,12 +1,15 @@
 import 'dart:io';
-
 import 'package:english_words/english_words.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
+=======
+>>>>>>> refs/remotes/origin/main
 import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,6 +19,7 @@ class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
+<<<<<<< HEAD
   MyHomePage createState() => MyHomePage(); 
   // Widget build(BuildContext context) {
   //   return ChangeNotifierProvider(
@@ -30,13 +34,34 @@ class MyApp extends StatefulWidget {
   //     ),
   //   );
   // }
+=======
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) => MyAppState(),
+      child: MaterialApp(
+        title: 'Namer App',
+        theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        ),
+        home: MyHomePage(),
+      ),
+    );
+  }
+>>>>>>> refs/remotes/origin/main
 }
 
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
+  String? imagePath; // Store the path of the captured image
 
   void getNext() {
     current = WordPair.random();
+    notifyListeners();
+  }
+
+  void setCapturedImage(String path) {
+    imagePath = path;
     notifyListeners();
   }
 }
@@ -44,22 +69,97 @@ class MyAppState extends ChangeNotifier {
 class MyHomePage extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     // File? selectedImage; 
+=======
+    var appState = context.watch<MyAppState>();
+
+>>>>>>> refs/remotes/origin/main
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'MenuBITE',
+          style: TextStyle(
+            fontSize: 70,
+            fontFamily: 'Arial',
+            color: Colors.orange,
+          ),
+        ),
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.green,
+              ),
+              child: Text(
+                'Drawer Header',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              title: Text('Item 1'),
+              onTap: () {
+                // Handle the item tap
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Item 2'),
+              onTap: () {
+                // Handle the item tap
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CustomButton(title: 'Take a Photo :)' icon: Icons.camera_alt_outlined, onClick: () =>{}),
           Center(
             child: ElevatedButton(
+<<<<<<< HEAD
               onPressed: () {
                 // appState.getNext();
                 // print('button pressed!');
                   takePhoto();
                 },
+=======
+              onPressed: () async {
+                // Open the gallery to pick an image
+                final pickedFile = await ImagePicker().pickImage(
+                  source: ImageSource.gallery,
+                );
+
+                if (pickedFile != null) {
+                  // Save the image path to the app state
+                  appState.setCapturedImage(pickedFile.path);
+
+                  // Run our methods that we want to run
+
+                  print('Image selected from gallery: ${pickedFile.path}');
+                }
+              },
+>>>>>>> refs/remotes/origin/main
               style: ElevatedButton.styleFrom(
-                fixedSize:
-                    Size(200, 150), // Adjust the width and height as needed
+                fixedSize: Size(200, 150),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -69,7 +169,15 @@ class MyHomePage extends State<MyApp> {
               )
             ),
           ),
+<<<<<<< HEAD
           //selectedImage != null ? Image.file(selectedImage!) : const Text("Please Select An Image")
+=======
+          SizedBox(height: 20),
+          // Display the selected image if available
+          appState.imagePath != null
+              ? Image.file(File(appState.imagePath!))
+              : Container(),
+>>>>>>> refs/remotes/origin/main
         ],
       ),
     );
