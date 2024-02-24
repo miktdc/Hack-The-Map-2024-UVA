@@ -1,7 +1,10 @@
 import 'dart:io';
 
 import 'package:english_words/english_words.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -9,23 +12,24 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MyAppState(),
-      child: MaterialApp(
-        title: 'Namer App',
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
-        ),
-        home: MyHomePage(),
-      ),
-    );
-  }
+  MyHomePage createState() => MyHomePage(); 
+  // Widget build(BuildContext context) {
+  //   return ChangeNotifierProvider(
+  //     create: (context) => MyAppState(),
+  //     child: MaterialApp(
+  //       title: 'Namer App',
+  //       theme: ThemeData(
+  //         useMaterial3: true,
+  //         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+  //       ),
+  //       home: MyHomePage(),
+  //     ),
+  //   );
+  // }
 }
 
 class MyAppState extends ChangeNotifier {
@@ -37,33 +41,21 @@ class MyAppState extends ChangeNotifier {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-    var menuImage;
-
+    // File? selectedImage; 
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          CustomButton(title: 'Take a Photo :)' icon: Icons.camera_alt_outlined, onClick: () =>{}),
           Center(
             child: ElevatedButton(
               onPressed: () {
                 // appState.getNext();
                 // print('button pressed!');
-                File? image; 
-                Future takePhoto() async {
-                  try {
-                    final image = await ImagePicker().pickImage(source: ImageSource.camera);
-                    if(image == null) return; 
-                    final imageTemp = File(image.path); 
-                    menuImage= imageTemp;
-                  }
-                  on Exception catch(e){
-                    print('Failed to pick image: $e');
-                  }
-                  }
+                  takePhoto();
                 },
               style: ElevatedButton.styleFrom(
                 fixedSize:
@@ -74,11 +66,44 @@ class MyHomePage extends StatelessWidget {
                 children: [
                   Icon(Icons.camera_alt_outlined, size: 100),
                 ],
-              ),
+              )
             ),
           ),
+          //selectedImage != null ? Image.file(selectedImage!) : const Text("Please Select An Image")
         ],
       ),
     );
+  }
+
+  Widget CustomButton({
+    required String title,
+    required IconData icon,
+    required VoidCallback onClick, 
+  }) {
+    return Container(
+      width: 200,
+      child: ElevatedButton(
+        onPressed: onClick,
+        child: Row(
+          children: [
+            Icon(icon),
+            SizedBox(
+              width: 20,
+            ),
+            Text(title)
+          ],
+        )
+      )
+    )
+
+  }
+
+  Future takePhoto() async {
+    final returnedImage = await ImagePicker().pickImage(source: ImageSource.camera);
+
+    setState(() {
+      selectedImage = File(returnedImage!.path);
+    });
+
   }
 }
