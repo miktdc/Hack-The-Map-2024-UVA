@@ -51,7 +51,7 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: Builder(builder: (BuildContext context) {
           return Image.asset(
-            'assets/menubiteapplogo.png', // Replace with your image asset path
+            'assets/menubietapplogoHorizontal.png', // Replace with your image asset path
             height: 40, // Adjust the height as needed
           );
         },
