@@ -29,22 +29,32 @@ class MyApp extends StatelessWidget {
 
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
+  String? imagePath; // Store the path of the captured image
+
+  void getNext() {
+    current = WordPair.random();
+    notifyListeners();
+  }
+
+  void setCapturedImage(String path) {
+    imagePath = path;
+    notifyListeners();
+  }
 }
 
 class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
-    var menuImage;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
           'MenuBITE',
           style: TextStyle(
-            fontSize: 40, // Adjust the font size as needed
-            fontFamily: 'Arial', // Change the font family as needed
-            color: Colors.orange, // Change the text color as needed
+            fontSize: 70,
+            fontFamily: 'Arial',
+            color: Colors.orange,
           ),
         ),
         leading: Builder(
@@ -64,31 +74,30 @@ class MyHomePage extends StatelessWidget {
           children: [
             DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.green, // Adjust the color as needed
+                color: Colors.green,
               ),
               child: Text(
-                'Menu',
+                'Drawer Header',
                 style: TextStyle(
-                  color: Colors.white, // Adjust the text color as needed
+                  color: Colors.white,
                   fontSize: 24,
                 ),
               ),
             ),
             ListTile(
-              title: Text('Favourites'),
+              title: Text('Item 1'),
               onTap: () {
                 // Handle the item tap
-                Navigator.pop(context); // Close the drawer
+                Navigator.pop(context);
               },
             ),
             ListTile(
-              title: Text('History'),
+              title: Text('Item 2'),
               onTap: () {
                 // Handle the item tap
-                Navigator.pop(context); // Close the drawer
+                Navigator.pop(context);
               },
             ),
-            // Add more ListTile items as needed
           ],
         ),
       ),
@@ -97,25 +106,23 @@ class MyHomePage extends StatelessWidget {
         children: [
           Center(
             child: ElevatedButton(
-              onPressed: () {
-                // appState.getNext();
-                // print('button pressed!');
-                File? image;
-                Future takePhoto() async {
-                  try {
-                    final image = await ImagePicker().pickImage(source: ImageSource.camera);
-                    if(image == null) return;
-                    final imageTemp = File(image.path);
-                    menuImage= imageTemp;
-                  }
-                  on Exception catch(e){
-                    print('Failed to pick image: $e');
-                  }
-                  }
-                },
+              onPressed: () async {
+                // Open the gallery to pick an image
+                final pickedFile = await ImagePicker().pickImage(
+                  source: ImageSource.gallery,
+                );
+
+                if (pickedFile != null) {
+                  // Save the image path to the app state
+                  appState.setCapturedImage(pickedFile.path);
+
+                  // Run our methods that we want to run
+
+                  print('Image selected from gallery: ${pickedFile.path}');
+                }
+              },
               style: ElevatedButton.styleFrom(
-                fixedSize:
-                    Size(200, 150), // Adjust the width and height as needed
+                fixedSize: Size(200, 150),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -125,6 +132,11 @@ class MyHomePage extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: 20),
+          // Display the selected image if available
+          appState.imagePath != null
+              ? Image.file(File(appState.imagePath!))
+              : Container(),
         ],
       ),
     );
