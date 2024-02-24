@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         title: 'Namer App',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         ),
         home: MyHomePage(),
       ),
@@ -27,11 +27,6 @@ class MyApp extends StatelessWidget {
 
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
-
-  void getNext() {
-    current = WordPair.random();
-    notifyListeners();
-  }
 }
 
 class MyHomePage extends StatelessWidget {
@@ -40,13 +35,66 @@ class MyHomePage extends StatelessWidget {
     var appState = context.watch<MyAppState>();
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'MenuBITE',
+          style: TextStyle(
+            fontSize: 40, // Adjust the font size as needed
+            fontFamily: 'Arial', // Change the font family as needed
+            color: Colors.orange, // Change the text color as needed
+          ),
+        ),
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.green, // Adjust the color as needed
+              ),
+              child: Text(
+                'Menu',
+                style: TextStyle(
+                  color: Colors.white, // Adjust the text color as needed
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              title: Text('Favourites'),
+              onTap: () {
+                // Handle the item tap
+                Navigator.pop(context); // Close the drawer
+              },
+            ),
+            ListTile(
+              title: Text('History'),
+              onTap: () {
+                // Handle the item tap
+                Navigator.pop(context); // Close the drawer
+              },
+            ),
+            // Add more ListTile items as needed
+          ],
+        ),
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(
             child: ElevatedButton(
               onPressed: () {
-                appState.getNext();
                 print('button pressed!');
               },
               style: ElevatedButton.styleFrom(
