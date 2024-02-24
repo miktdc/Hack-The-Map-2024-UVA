@@ -1,8 +1,11 @@
 import 'dart:io';
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_ml_vision/firebase_ml_vision.dart';
+import 'translation.dart';
 
 void main() {
   runApp(MyApp());
@@ -108,7 +111,7 @@ class MyHomePage extends StatelessWidget {
               onPressed: () async {
                 // Open the gallery to pick an image
                 final pickedFile = await ImagePicker().pickImage(
-                  source: ImageSource.gallery,
+                  source: ImageSource.camera,
                 );
 
                 if (pickedFile != null) {
@@ -132,12 +135,24 @@ class MyHomePage extends StatelessWidget {
             ),
           ),
           SizedBox(height: 20),
-          // Display the selected image if available
+          // Send image to secondary screen
           appState.imagePath != null
               ? Image.file(File(appState.imagePath!))
-              : Container(),
+              : Navigator.of(context).push(MaterialPageRoute(builder: () => second(image: PickedFile)));
         ],
       ),
     );
   }
+}
+
+
+
+
+class ImageToText extends StatefulWidget {
+  @override
+  TranslatePage createState() => TranslatePage();
+}
+class TranslatePage extends State<ImageToText>{
+  File? image =File(appSta)
+
 }
