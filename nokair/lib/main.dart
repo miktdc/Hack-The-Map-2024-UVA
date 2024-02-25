@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
+import 'package:nokair/apis/recognition_api.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 void main() {
   runApp(MyApp());
@@ -43,6 +45,8 @@ class MyAppState extends ChangeNotifier {
 }
 
 class MyHomePage extends StatelessWidget {
+  String? shownText;
+
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
@@ -129,13 +133,12 @@ class MyHomePage extends StatelessWidget {
                 final pickedFile = await ImagePicker().pickImage(
                   source: ImageSource.camera,
                 );
-
                 if (pickedFile != null) {
-                  // Save the image path to the app state
+                  // Save the image path to the app stat
                   appState.setCapturedImage(pickedFile.path);
-
+                  final recognizedText = await RecognitionApi.recognizeText(InputImage.fromFile(File(pickedFile.path))); 
+                  shownText = recognizedText;
                   // Run our methods that we want to run
-
                   print('Image selected from gallery: ${pickedFile.path}');
                 }
               },
@@ -150,11 +153,25 @@ class MyHomePage extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 10),
+          if(shownText != null) Container(
+            color: Colors.grey, 
+            child: Text(
+              shownText!, 
+              style: TextStyle(fontSize: 15),
+            ) 
+          ) else(
+            Container(
+              child: Text(
+                "Failed to parse text due to image quality. Please retake photo!"
+              )
+            )
+          )
+
           // Send image to secondary screen
-          appState.imagePath != null
-              ? Image.file(File(appState.imagePath!))
-              : Container(),
+          // appState.imagePath != null
+          //     ? Image.file(File(appState.imagePath!))
+          //     : Container(),
         ],
       ),
     );
