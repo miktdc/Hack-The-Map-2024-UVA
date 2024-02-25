@@ -12,7 +12,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
+  
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
@@ -169,9 +170,15 @@ class MyHomePage extends StatelessWidget {
           )
 
           // Send image to secondary screen
+<<<<<<< HEAD
           // appState.imagePath != null
           //     ? Image.file(File(appState.imagePath!))
           //     : Container(),
+=======
+          appState.imagePath != null
+              ? Image.file(File(appState.imagePath!))
+              : Container()
+>>>>>>> refs/remotes/origin/main
         ],
       ),
     );
