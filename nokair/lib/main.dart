@@ -2,18 +2,22 @@ import 'dart:io';
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:nokair/apis/recognition_api.dart';
+import 'package:nokair/apis/translation.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:google_mlkit_translation/google_mlkit_translation.dart';
+import 'package:translator/translator.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}):super(key:key);
   
   @override
+  MyHomePage createState() => MyHomePage();
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
@@ -23,7 +27,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         ),
-        home: MyHomePage(),
+        //home: MyHomePage(),
       ),
     );
   }
@@ -45,8 +49,9 @@ class MyAppState extends ChangeNotifier {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends State<MyApp> {
   String? shownText;
+  final translator = GoogleTranslator();
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +143,8 @@ class MyHomePage extends StatelessWidget {
                   // Save the image path to the app stat
                   appState.setCapturedImage(pickedFile.path);
                   final recognizedText = await RecognitionApi.recognizeText(InputImage.fromFile(File(pickedFile.path))); 
-                  shownText = recognizedText;
+                  final translatedText = await TranslationApi.translateText(recognizedText!);
+                  shownText = translatedText;
                   // Run our methods that we want to run
                   print('Image selected from gallery: ${pickedFile.path}');
                 }
@@ -170,18 +176,17 @@ class MyHomePage extends StatelessWidget {
           )
 
           // Send image to secondary screen
-<<<<<<< HEAD
           // appState.imagePath != null
           //     ? Image.file(File(appState.imagePath!))
           //     : Container(),
-=======
-          appState.imagePath != null
-              ? Image.file(File(appState.imagePath!))
-              : Container()
->>>>>>> refs/remotes/origin/main
         ],
       ),
     );
+  }
+
+  translate(String text, String lang) async {
+    await translator.translate(text, to: lang).then((value) {
+    });
   }
 }
 
