@@ -49,12 +49,13 @@ class MyHomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Builder(builder: (BuildContext context) {
-          return Image.asset(
-            'assets/menubietapplogoHorizontal.png', // Replace with your image asset path
-            height: 60, // Adjust the height as needed
-          );
-        },
+        title: Builder(
+          builder: (BuildContext context) {
+            return Image.asset(
+              'assets/menubiteapplogoHorizontal.png',
+              height: 60,
+            );
+          },
         ),
         leading: Builder(
           builder: (BuildContext context) {
@@ -75,26 +76,44 @@ class MyHomePage extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.green,
               ),
-              child: Text(
-                'Drawer Header',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Image.asset(
+                    'assets/menubiteapplogo.png', // Replace with your square logo asset path
+                    height: 65, // Adjust the height as needed
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Menu',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 30,
+                    ),
+                  ),
+                ],
               ),
             ),
             ListTile(
-              title: Text('Item 1'),
+              title: Text('Favourites'),
               onTap: () {
                 // Handle the item tap
-                Navigator.pop(context);
+                Navigator.pop(context); // Close the drawer
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => FavoritesPage()),
+                );
               },
             ),
             ListTile(
-              title: Text('Item 2'),
+              title: Text('History'),
               onTap: () {
                 // Handle the item tap
                 Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HistoryPage()),
+                );
               },
             ),
           ],
@@ -137,6 +156,34 @@ class MyHomePage extends StatelessWidget {
               ? Image.file(File(appState.imagePath!))
               : Container(),
         ],
+      ),
+    );
+  }
+}
+
+class FavoritesPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Favorites'),
+      ),
+      body: Center(
+        child: Text('This is the Favorites Page'),
+      ),
+    );
+  }
+}
+
+class HistoryPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('History'),
+      ),
+      body: Center(
+        child: Text('This is the History Page'),
       ),
     );
   }
