@@ -6,6 +6,10 @@ import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'translation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() {
   runApp(MyApp());
@@ -13,7 +17,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
+  
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -29,6 +33,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
@@ -138,21 +143,10 @@ class MyHomePage extends StatelessWidget {
           // Send image to secondary screen
           appState.imagePath != null
               ? Image.file(File(appState.imagePath!))
-              : Navigator.of(context).push(MaterialPageRoute(builder: () => second(image: PickedFile)));
+              : Container()
         ],
       ),
     );
   }
 }
 
-
-
-
-class ImageToText extends StatefulWidget {
-  @override
-  TranslatePage createState() => TranslatePage();
-}
-class TranslatePage extends State<ImageToText>{
-  File? image =File(appSta)
-
-}
