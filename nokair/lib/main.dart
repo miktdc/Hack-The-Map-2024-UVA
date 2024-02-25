@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+
 }
 
 class MyAppState extends ChangeNotifier {
@@ -50,6 +51,12 @@ bool firstTime = true;
 
 class MyHomePage extends StatelessWidget {
   
+  void main() {
+    runApp(
+      MaterialApp(
+      debugShowCheckedModeBanner: false,
+    ));
+  }
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
