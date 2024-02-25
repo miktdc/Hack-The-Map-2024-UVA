@@ -183,7 +183,49 @@ class HistoryPage extends StatelessWidget {
         title: Text('History'),
       ),
       body: Center(
-        child: Text('This is the History Page'),
+        child: ListView.builder(
+          itemCount: 3, // Replace with the number of sections you want
+          itemBuilder: (BuildContext context, int index) {
+            // Provide different titles and subtitles for each section
+            String sectionTitle = 'Section';
+            String sectionSubtitle = 'Subtitle';
+
+            return buildSection(sectionTitle, sectionSubtitle);
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget buildSection(String title, String subtitle) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey.withOpacity(0.5)),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      padding: EdgeInsets.all(16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Left column with title and subtitle
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                subtitle,
+                style: TextStyle(fontSize: 14, color: Colors.grey),
+              ),
+            ],
+          ),
+          // Add any other widgets or spacing as needed between columns
+          SizedBox(width: 16),
+          // Add more widgets if needed
+        ],
       ),
     );
   }
