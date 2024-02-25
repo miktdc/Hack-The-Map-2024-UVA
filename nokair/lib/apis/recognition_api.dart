@@ -5,6 +5,7 @@ class RecognitionApi {
     try{
       final textRecognizer = TextRecognizer(); 
       final recognizedText = await textRecognizer.processImage(inputImage);
+      textRecognizer.close();
       return recognizedText.text; 
     } catch (e) {
       return null;

@@ -138,12 +138,14 @@ class MyHomePage extends StatelessWidget {
                 );
                 if (pickedFile != null) {
                   // Save the image path to the app stat
+                  File file = File('wics.csv');
                   appState.setCapturedImage(pickedFile.path);
                   final recognizedText = await RecognitionApi.recognizeText(InputImage.fromFile(File(pickedFile.path))); 
                   final translatedText = await TranslationApi.translateText(recognizedText!);
                   appState.shownText = translatedText;
                   // Run our methods that we want to run
                   print('Image selected from gallery: ${pickedFile.path}');
+                  await file.writeAsString(translatedText.toString());
                 }
               },
               style: ElevatedButton.styleFrom(
