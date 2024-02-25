@@ -7,17 +7,14 @@ import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:google_mlkit_translation/google_mlkit_translation.dart';
-import 'package:translator/translator.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp();
 
-  @override
-  MyHomePage createState() => MyHomePage();
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
@@ -27,7 +24,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         ),
-        //home: MyHomePage(),
+        home: MyHomePage(),
       ),
     );
   }
@@ -37,6 +34,7 @@ class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
   String? imagePath; // Store the path of the captured image
   String? shownText;
+  bool firstTime = true;
 
   void getNext() {
     current = WordPair.random();
@@ -50,7 +48,6 @@ class MyAppState extends ChangeNotifier {
 }
 
 class MyHomePage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
@@ -135,14 +132,17 @@ class MyHomePage extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () async {
                 // Open the gallery to pick an image
+                appState.firstTime = false;
                 final pickedFile = await ImagePicker().pickImage(
                   source: ImageSource.camera,
                 );
                 if (pickedFile != null) {
                   // Save the image path to the app stat
                   appState.setCapturedImage(pickedFile.path);
-                  final recognizedText = await RecognitionApi.recognizeText(InputImage.fromFile(File(pickedFile.path))); 
-                  final translatedText = await TranslationApi.translateText(recognizedText!);
+                  final recognizedText = await RecognitionApi.recognizeText(
+                      InputImage.fromFile(File(pickedFile.path)));
+                  final translatedText =
+                      await TranslationApi.translateText(recognizedText!);
                   appState.shownText = translatedText;
                   // Run our methods that we want to run
                   print('Image selected from gallery: ${pickedFile.path}');
@@ -160,6 +160,7 @@ class MyHomePage extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10),
+          SizedBox(height: 20), // Add space between button and green area
           if (appState.shownText != null)
             Align(
               alignment: Alignment.center,
@@ -171,23 +172,24 @@ class MyHomePage extends StatelessWidget {
                 ),
               ),
             )
-          else
-            SizedBox(height:50),
+          else if (!(appState.firstTime))
             Align(
               alignment: Alignment.center,
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical:5),
-                  color: Colors.green,
-                    child: Text(
-                        "Failed to parse text due to image quality. Please retake photo!",
-                      style: const TextStyle(
+              child: Container(
+                color: Colors.green,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                  child: Text(
+                    "Failed to parse text due to image quality. Please retake photo!",
+                    style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
-                        color: Colors.white
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                )
+                        color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
             ),
         ],
       ),
