@@ -35,7 +35,7 @@ class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
   String? imagePath; // Store the path of the captured image
   String? shownText;
-  bool firstTime = true;
+bool firstTime = true;
 
   void getNext() {
     current = WordPair.random();
@@ -49,7 +49,7 @@ class MyAppState extends ChangeNotifier {
 }
 
 class MyHomePage extends StatelessWidget {
-
+  
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
@@ -134,7 +134,7 @@ class MyHomePage extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () async {
                 // Open the gallery to pick an image
-                appState.firstTime = false;
+appState.firstTime = false;
                 final pickedFile = await ImagePicker().pickImage(
                   source: ImageSource.camera,
                 );
@@ -143,7 +143,7 @@ class MyHomePage extends StatelessWidget {
                   File file = File('wics.csv');
                   appState.setCapturedImage(pickedFile.path);
                   final recognizedText = await RecognitionApi.recognizeText(
-                      InputImage.fromFile(File(pickedFile.path)));
+                      InputImage.fromFile(File(pickedFile.path))); 
                   final translatedText =
                       await TranslationApi.translateText(recognizedText!);
                   appState.shownText = translatedText;
@@ -164,7 +164,7 @@ class MyHomePage extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10),
-          SizedBox(height: 20), // Add space between button and green area
+SizedBox(height: 20), // Add space between button and green area
           if (appState.shownText != null)
             Align(
               alignment: Alignment.center,
@@ -179,19 +179,20 @@ class MyHomePage extends StatelessWidget {
           else if (!(appState.firstTime))
             Align(
               alignment: Alignment.center,
-              child: Container(
-                color: Colors.green,
-                child: Padding(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical:5),
+                  color: Colors.green,
+child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-                  child: Text(
-                    "Failed to parse text due to image quality. Please retake photo!",
-                    style: const TextStyle(
+                    child: Text(
+                        "Failed to parse text due to image quality. Please retake photo!",
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                         color: Colors.white),
-                    textAlign: TextAlign.center,
-                  ),
+                      textAlign: TextAlign.center,
+                    ),
                 ),
               ),
             ),
@@ -200,6 +201,8 @@ class MyHomePage extends StatelessWidget {
     );
   }
 }
+
+
 
 class FavoritesPage extends StatelessWidget {
   @override
