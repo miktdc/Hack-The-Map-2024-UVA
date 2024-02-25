@@ -12,7 +12,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -29,10 +29,10 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
   String? imagePath; // Store the path of the captured image
+  String? shownText;
 
   void getNext() {
     current = WordPair.random();
@@ -46,7 +46,6 @@ class MyAppState extends ChangeNotifier {
 }
 
 class MyHomePage extends StatelessWidget {
-  String? shownText;
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +84,8 @@ class MyHomePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Image.asset(
-                    'assets/menubiteapplogo.png', // Replace with your square logo asset path
+                    'assets/menubiteapplogo.png',
+                    // Replace with your square logo asset path
                     height: 65, // Adjust the height as needed
                   ),
                   SizedBox(height: 10),
@@ -137,8 +137,9 @@ class MyHomePage extends StatelessWidget {
                 if (pickedFile != null) {
                   // Save the image path to the app stat
                   appState.setCapturedImage(pickedFile.path);
-                  final recognizedText = await RecognitionApi.recognizeText(InputImage.fromFile(File(pickedFile.path))); 
-                  shownText = recognizedText;
+                  final recognizedText = await RecognitionApi.recognizeText(
+                      InputImage.fromFile(File(pickedFile.path)));
+                  appState.shownText = recognizedText;
                   // Run our methods that we want to run
                   print('Image selected from gallery: ${pickedFile.path}');
                 }
@@ -155,30 +156,35 @@ class MyHomePage extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10),
-          if(shownText != null) Container(
-            color: Colors.grey, 
-            child: Text(
-              shownText!, 
-              style: TextStyle(fontSize: 15),
-            ) 
-          ) else(
-            Container(
-              child: Text(
-                "Failed to parse text due to image quality. Please retake photo!"
-              )
+          if (appState.shownText != null)
+            Align(
+              alignment: Alignment.center,
+              child: Container(
+                color: Colors.grey,
+                child: Text(
+                  appState.shownText!,
+                  style: TextStyle(fontSize: 15),
+                ),
+              ),
             )
-          )
-
-          // Send image to secondary screen
-<<<<<<< HEAD
-          // appState.imagePath != null
-          //     ? Image.file(File(appState.imagePath!))
-          //     : Container(),
-=======
-          appState.imagePath != null
-              ? Image.file(File(appState.imagePath!))
-              : Container()
->>>>>>> refs/remotes/origin/main
+          else
+            SizedBox(height:50),
+            Align(
+              alignment: Alignment.center,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical:5),
+                  color: Colors.green,
+                    child: Text(
+                        "Failed to parse text due to image quality. Please retake photo!",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Colors.white
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                )
+            ),
         ],
       ),
     );
