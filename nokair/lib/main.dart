@@ -13,9 +13,9 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}):super(key:key);
-  
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   MyHomePage createState() => MyHomePage();
   Widget build(BuildContext context) {
@@ -33,10 +33,10 @@ class MyApp extends StatefulWidget {
   }
 }
 
-
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
   String? imagePath; // Store the path of the captured image
+  String? shownText;
 
   void getNext() {
     current = WordPair.random();
@@ -49,9 +49,7 @@ class MyAppState extends ChangeNotifier {
   }
 }
 
-class MyHomePage extends State<MyApp> {
-  String? shownText;
-  final translator = GoogleTranslator();
+class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +88,8 @@ class MyHomePage extends State<MyApp> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Image.asset(
-                    'assets/menubiteapplogo.png', // Replace with your square logo asset path
+                    'assets/menubiteapplogo.png',
+                    // Replace with your square logo asset path
                     height: 65, // Adjust the height as needed
                   ),
                   SizedBox(height: 10),
@@ -144,7 +143,7 @@ class MyHomePage extends State<MyApp> {
                   appState.setCapturedImage(pickedFile.path);
                   final recognizedText = await RecognitionApi.recognizeText(InputImage.fromFile(File(pickedFile.path))); 
                   final translatedText = await TranslationApi.translateText(recognizedText!);
-                  shownText = translatedText;
+                  appState.shownText = translatedText;
                   // Run our methods that we want to run
                   print('Image selected from gallery: ${pickedFile.path}');
                 }
@@ -161,32 +160,38 @@ class MyHomePage extends State<MyApp> {
             ),
           ),
           SizedBox(height: 10),
-          if(shownText != null) Container(
-            color: Colors.grey, 
-            child: Text(
-              shownText!, 
-              style: TextStyle(fontSize: 15),
-            ) 
-          ) else(
-            Container(
-              child: Text(
-                "Failed to parse text due to image quality. Please retake photo!"
-              )
+          if (appState.shownText != null)
+            Align(
+              alignment: Alignment.center,
+              child: Container(
+                color: Colors.grey,
+                child: Text(
+                  appState.shownText!,
+                  style: TextStyle(fontSize: 15),
+                ),
+              ),
             )
-          )
-
-          // Send image to secondary screen
-          // appState.imagePath != null
-          //     ? Image.file(File(appState.imagePath!))
-          //     : Container(),
+          else
+            SizedBox(height:50),
+            Align(
+              alignment: Alignment.center,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical:5),
+                  color: Colors.green,
+                    child: Text(
+                        "Failed to parse text due to image quality. Please retake photo!",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Colors.white
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                )
+            ),
         ],
       ),
     );
-  }
-
-  translate(String text, String lang) async {
-    await translator.translate(text, to: lang).then((value) {
-    });
   }
 }
 
