@@ -127,7 +127,7 @@ class MyHomePage extends StatelessWidget {
               onPressed: () async {
                 // Open the gallery to pick an image
                 final pickedFile = await ImagePicker().pickImage(
-                  source: ImageSource.gallery,
+                  source: ImageSource.camera,
                 );
 
                 if (pickedFile != null) {
@@ -151,7 +151,7 @@ class MyHomePage extends StatelessWidget {
             ),
           ),
           SizedBox(height: 20),
-          // Display the selected image if available
+          // Send image to secondary screen
           appState.imagePath != null
               ? Image.file(File(appState.imagePath!))
               : Container(),
